@@ -1,12 +1,15 @@
 {
 	"name": "Devcontainer Features",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
-
+	"mounts": [
+		"source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind",
+		"source=${env:HOME}${env:USERPROFILE}/.config/gh,target=/home/vscode/.config/gh,type=bind"
+	],
 	"remoteEnv": {
 		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
 	},
