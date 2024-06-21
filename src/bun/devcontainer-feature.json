@@ -1,6 +1,6 @@
 {
     "name": "Bun",
     "id": "bun",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Bun is a fast JavaScript runtime."
 }
