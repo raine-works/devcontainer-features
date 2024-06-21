@@ -1,0 +1,15 @@
+{
+	"name": "Devcontainer Features",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker": {},
+		"ghcr.io/devcontainers/features/node:1": {}
+	},
+
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	},
+
+	"onCreateCommand": "npm install -g @devcontainers/cli"
+}
