@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      contents: write
     steps:
       - uses: actions/checkout@v3
-      
       - name: "Publish"
         uses: devcontainers/action@v1
         with:
@@ -20,8 +20,7 @@ jobs:
           base-path-to-features: "./src"
           generate-docs: "true"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       - name: Create PR for Documentation
         id: push_image_info
         env:
