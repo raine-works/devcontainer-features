@@ -1,0 +1,13 @@
+{
+    "name": "Bun",
+    "id": "bun",
+    "version": "1.0.0",
+    "description": "Install the Bun JavaScript runtime.",
+    "options": {
+        "version": {
+            "type": "string",
+            "default": "latest",
+            "description": "Bun version."
+        }
+    }
+}

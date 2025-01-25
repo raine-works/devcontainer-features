@@ -1,0 +1,14 @@
+{
+    "name": "Deno",
+    "id": "deno",
+    "version": "1.0.0",
+    "description": "Install the Deno JavaScript runtime.",
+    "options": {
+        "version": {
+            "type": "string",
+            "default": "latest",
+            "description": "Deno version."
+        }
+    }
+    
+}
