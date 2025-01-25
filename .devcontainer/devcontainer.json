@@ -1,6 +1,6 @@
 {
     "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
-    "mounts": ["source=${env:HOME}${env:USERPROFILE}/.config/gh,target=/home/vscode/.config/gh,type=bind"],
+    "mounts": ["source=${env:HOME}${env:USERPROFILE}/.config/gh,target=/home/node/.config/gh,type=bind"],
     "customizations": {
         "vscode": {
             "settings": {
