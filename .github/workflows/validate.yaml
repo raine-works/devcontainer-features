@@ -1,3 +1,4 @@
+# Validates every devcontainer-feature.json against the spec schema on PRs.
 name: "Validate devcontainer-feature.json files"
 on:
   workflow_dispatch:
