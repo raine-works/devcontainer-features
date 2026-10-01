@@ -1,0 +1,43 @@
+{
+    "pinned": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "nodeVersion": "22.11.0",
+                "packageManagers": "pnpm@10.4.1"
+            }
+        }
+    },
+    "major": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "nodeVersion": "20"
+            }
+        }
+    },
+    "all": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "packageManagers": "pnpm,yarn@4,bun"
+            }
+        }
+    },
+    "yarn-classic": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "packageManagers": "yarn"
+            }
+        }
+    },
+    "none": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "packageManagers": "none"
+            }
+        }
+    }
+}

@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Installs Node.js system-wide into /usr/local from the official nodejs.org
-# binary tarball (SHA-256 verified), then installs pnpm globally with npm.
+# binary tarball (SHA-256 verified), then installs the requested package
+# managers (npm, pnpm, yarn, bun) globally with npm.
 #
 # The dev container CLI runs this script as root during image build and exposes
 # each feature option as an upper-case environment variable (option
-# "nodeVersion" becomes $NODEVERSION).
+# "nodeVersion" becomes $NODEVERSION, "packageManagers" becomes
+# $PACKAGEMANAGERS).
 set -e
 
 NODE_VERSION="${NODEVERSION:-lts}"
-PNPM_VERSION="${PNPMVERSION:-latest}"
+PACKAGE_MANAGERS="${PACKAGEMANAGERS-pnpm}"
 DIST_URL="https://nodejs.org/dist"
 
 # Debian/Ubuntu only: install curl, certificates and xz (the tarball is .tar.xz)
@@ -87,8 +89,74 @@ grep " ${TARBALL}\$" SHASUMS256.txt | sha256sum -c -
 tar -xJf "${TARBALL}" -C /usr/local --strip-components=1 --no-same-owner \
     --exclude='CHANGELOG.md' --exclude='LICENSE' --exclude='README.md'
 
-# Install pnpm globally; "latest" or a dist-tag also work as ${PNPM_VERSION}.
-npm install -g "pnpm@${PNPM_VERSION}"
+# Turn "pnpm,yarn@4,bun@1.2.0" into npm package specs. The option is user input
+# that ends up on an npm command line, so names are allow-listed and versions
+# are restricted to a safe character set.
+packages=()
+npm_spec=""
+seen=" "
+IFS=',' read -ra requested <<< "${PACKAGE_MANAGERS}"
+for entry in "${requested[@]}"; do
+    entry="${entry//[[:space:]]/}"
+    if [ -z "${entry}" ] || [ "${entry}" == "none" ]; then
+        continue
+    fi
+
+    name="${entry%%@*}"
+    version="latest"
+    if [[ "${entry}" == *@* ]]; then
+        version="${entry#*@}"
+    fi
+
+    if ! [[ "${version}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+        echo "Invalid version in packageManagers entry '${entry}'" >&2
+        exit 1
+    fi
+    if [[ "${seen}" == *" ${name} "* ]]; then
+        echo "Duplicate package manager '${name}' in packageManagers" >&2
+        exit 1
+    fi
+    seen+="${name} "
+
+    case "${name}" in
+        npm)
+            npm_spec="npm@${version}"
+            ;;
+        pnpm | bun)
+            packages+=("${name}@${version}")
+            ;;
+        yarn)
+            # Plain "yarn" and 1.x are Yarn Classic (npm package "yarn").
+            # Anything newer is Yarn Berry, shipped as @yarnpkg/cli-dist;
+            # "berry" is shorthand for its latest release.
+            if [ "${version}" == "latest" ] || [[ "${version}" =~ ^1(\.|$) ]]; then
+                packages+=("yarn@${version}")
+            elif [ "${version}" == "berry" ]; then
+                packages+=("@yarnpkg/cli-dist@latest")
+            else
+                packages+=("@yarnpkg/cli-dist@${version}")
+            fi
+            ;;
+        *)
+            echo "Unsupported package manager '${name}'. Supported: npm, pnpm, yarn, bun" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Upgrade npm on its own first so the remaining installs use the new version.
+if [ -n "${npm_spec}" ]; then
+    npm install -g "${npm_spec}"
+fi
+
+if [ ${#packages[@]} -gt 0 ]; then
+    npm install -g "${packages[@]}"
+fi
 npm cache clean --force
 
-echo "Installed: node $(node --version), npm $(npm --version), pnpm $(pnpm --version)"
+echo "Installed: node $(node --version), npm $(npm --version)"
+for manager in pnpm yarn bun; do
+    if command -v "${manager}" &> /dev/null; then
+        echo "  ${manager} $(${manager} --version)"
+    fi
+done
