@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 # Installs Node.js system-wide into /usr/local from the official nodejs.org
 # binary tarball (SHA-256 verified), then installs the requested package
-# managers (npm, pnpm, yarn, bun) globally with npm.
+# managers (pnpm, yarn, bun) globally with npm. npm ships with Node.js.
 #
 # The dev container CLI runs this script as root during image build and exposes
 # each feature option as an upper-case environment variable (option
-# "nodeVersion" becomes $NODEVERSION, "packageManagers" becomes
-# $PACKAGEMANAGERS).
+# "nodeVersion" becomes $NODEVERSION; options "pnpm", "yarn" and "bun" become
+# $PNPM, $YARN and $BUN).
 set -e
 
 NODE_VERSION="${NODEVERSION:-lts}"
-PACKAGE_MANAGERS="${PACKAGEMANAGERS-pnpm}"
+PNPM_VERSION="${PNPM:-latest}"
+YARN_VERSION="${YARN:-none}"
+BUN_VERSION="${BUN:-none}"
 DIST_URL="https://nodejs.org/dist"
 
 # Debian/Ubuntu only: install curl, certificates and xz (the tarball is .tar.xz)
@@ -89,65 +91,44 @@ grep " ${TARBALL}\$" SHASUMS256.txt | sha256sum -c -
 tar -xJf "${TARBALL}" -C /usr/local --strip-components=1 --no-same-owner \
     --exclude='CHANGELOG.md' --exclude='LICENSE' --exclude='README.md'
 
-# Turn "pnpm,yarn@4,bun@1.2.0" into npm package specs. The option is user input
-# that ends up on an npm command line, so names are allow-listed and versions
-# are restricted to a safe character set.
-packages=()
-npm_spec=""
-seen=" "
-IFS=',' read -ra requested <<< "${PACKAGE_MANAGERS}"
-for entry in "${requested[@]}"; do
-    entry="${entry//[[:space:]]/}"
-    if [ -z "${entry}" ] || [ "${entry}" == "none" ]; then
-        continue
-    fi
-
-    name="${entry%%@*}"
-    version="latest"
-    if [[ "${entry}" == *@* ]]; then
-        version="${entry#*@}"
-    fi
-
-    if ! [[ "${version}" =~ ^[A-Za-z0-9._-]+$ ]]; then
-        echo "Invalid version in packageManagers entry '${entry}'" >&2
+# Each manager option is "none" (skip), "latest", or a version. The values are
+# user input that ends up on an npm command line, so restrict them to a safe
+# character set before use.
+for option in "${PNPM_VERSION}" "${YARN_VERSION}" "${BUN_VERSION}"; do
+    if ! [[ "${option}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+        echo "Invalid package manager version '${option}'" >&2
         exit 1
     fi
-    if [[ "${seen}" == *" ${name} "* ]]; then
-        echo "Duplicate package manager '${name}' in packageManagers" >&2
-        exit 1
-    fi
-    seen+="${name} "
-
-    case "${name}" in
-        npm)
-            npm_spec="npm@${version}"
-            ;;
-        pnpm | bun)
-            packages+=("${name}@${version}")
-            ;;
-        yarn)
-            # Plain "yarn" and 1.x are Yarn Classic (npm package "yarn").
-            # Anything newer is Yarn Berry, shipped as @yarnpkg/cli-dist;
-            # "berry" is shorthand for its latest release.
-            if [ "${version}" == "latest" ] || [[ "${version}" =~ ^1(\.|$) ]]; then
-                packages+=("yarn@${version}")
-            elif [ "${version}" == "berry" ]; then
-                packages+=("@yarnpkg/cli-dist@latest")
-            else
-                packages+=("@yarnpkg/cli-dist@${version}")
-            fi
-            ;;
-        *)
-            echo "Unsupported package manager '${name}'. Supported: npm, pnpm, yarn, bun" >&2
-            exit 1
-            ;;
-    esac
 done
 
-# Upgrade npm on its own first so the remaining installs use the new version.
-if [ -n "${npm_spec}" ]; then
-    npm install -g "${npm_spec}"
+packages=()
+
+if [ "${PNPM_VERSION}" != "none" ]; then
+    packages+=("pnpm@${PNPM_VERSION}")
 fi
+
+if [ "${BUN_VERSION}" != "none" ]; then
+    packages+=("bun@${BUN_VERSION}")
+fi
+
+# Yarn ships as two npm packages: "yarn" is Yarn Classic (1.x) and
+# "@yarnpkg/cli-dist" is modern Yarn (2+, "berry").
+case "${YARN_VERSION}" in
+    none)
+        ;;
+    classic)
+        packages+=("yarn@1")
+        ;;
+    latest | berry)
+        packages+=("@yarnpkg/cli-dist@latest")
+        ;;
+    1 | 1.*)
+        packages+=("yarn@${YARN_VERSION}")
+        ;;
+    *)
+        packages+=("@yarnpkg/cli-dist@${YARN_VERSION}")
+        ;;
+esac
 
 if [ ${#packages[@]} -gt 0 ]; then
     npm install -g "${packages[@]}"
