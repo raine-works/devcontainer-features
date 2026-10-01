@@ -1,0 +1,18 @@
+{
+    "name": "Node.js with pnpm",
+    "id": "node-pnpm",
+    "version": "1.0.0",
+    "description": "Install Node.js (checksum verified) with the pnpm package manager pre-installed.",
+    "options": {
+        "nodeVersion": {
+            "type": "string",
+            "default": "lts",
+            "description": "Node.js version: 'lts', 'latest', a major version such as '22', or an exact version such as '22.11.0'."
+        },
+        "pnpmVersion": {
+            "type": "string",
+            "default": "latest",
+            "description": "pnpm version: 'latest', a dist-tag such as 'next', or an exact version such as '10.4.1'."
+        }
+    }
+}

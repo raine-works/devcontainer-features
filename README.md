@@ -10,6 +10,7 @@ Small, dependable [Dev Container Features](https://containers.dev/implementors/f
 |---------|-------------|-----------|
 | [`bun`](src/bun/README.md) | Install the Bun JavaScript runtime. | `ghcr.io/raine-works/devcontainer-features/bun:1` |
 | [`deno`](src/deno/README.md) | Install the Deno JavaScript runtime. | `ghcr.io/raine-works/devcontainer-features/deno:1` |
+| [`node-pnpm`](src/node-pnpm) | Install Node.js (checksum verified) with pnpm pre-installed. | `ghcr.io/raine-works/devcontainer-features/node-pnpm:1` |
 
 ## Usage
 
