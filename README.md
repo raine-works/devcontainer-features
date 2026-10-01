@@ -10,6 +10,7 @@ Small, dependable [Dev Container Features](https://containers.dev/implementors/f
 |---------|-------------|-----------|
 | [`bun`](src/bun/README.md) | Install the Bun JavaScript runtime. | `ghcr.io/raine-works/devcontainer-features/bun:1` |
 | [`deno`](src/deno/README.md) | Install the Deno JavaScript runtime. | `ghcr.io/raine-works/devcontainer-features/deno:1` |
+| [`node`](src/node) | Install Node.js (checksum verified) with npm, plus pnpm, yarn and bun on request. | `ghcr.io/raine-works/devcontainer-features/node:1` |
 
 ## Usage
 
@@ -20,7 +21,8 @@ Add one or more features to your `devcontainer.json`:
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
         "ghcr.io/raine-works/devcontainer-features/bun:1": { "version": "1.2.0" },
-        "ghcr.io/raine-works/devcontainer-features/deno:1": {}
+        "ghcr.io/raine-works/devcontainer-features/deno:1": {},
+        "ghcr.io/raine-works/devcontainer-features/node:1": { "pnpm": "10.4.1", "yarn": "latest", "bun": "latest" }
     }
 }
 ```
