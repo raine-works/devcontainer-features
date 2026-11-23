@@ -29,7 +29,11 @@ Add one or more features to your `devcontainer.json`:
 
 Omit `version` (or set it to `latest`) to get the newest release. The `:1` tag follows the feature's major version, so you get compatible updates without breaking changes.
 
-Requirements: a Debian/Ubuntu based image. Each feature's README documents its options.
+Requirements: a Debian/Ubuntu based image. Each feature's README documents its options, and the [documentation](docs/README.md) has a getting started guide, a reference page per feature, troubleshooting and development notes.
+
+## Documentation
+
+Full guides live in [`docs/`](docs/README.md): [getting started](docs/getting-started.md), [checksums and verification](docs/checksums.md), [troubleshooting](docs/troubleshooting.md), [development](docs/development.md), and a reference page each for [Bun](docs/reference/bun.md), [Deno](docs/reference/deno.md) and [Node.js](docs/reference/node.md).
 
 ## Repository layout
 
