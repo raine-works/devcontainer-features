@@ -16,9 +16,10 @@ Give `version` a bare `X.Y.Z` version number. The script adds the `v` release-ta
 
 ## What the feature does
 
-1. Installs `curl` and `unzip` with `apt-get` if either is missing. Nothing is installed when both are already there.
-2. Sets `DENO_INSTALL=/usr/local` so the binary lands in `/usr/local/bin`, on `PATH` for all users.
-3. Runs Deno’s own installer from `https://deno.land/install.sh`, passing the tag in its `deno_version` variable when `version` is not `latest`.
+1. Checks that `version` is `latest` or a bare `X.Y.Z` release, and stops the build otherwise.
+2. Installs `curl` and `unzip` with `apt-get` if either is missing. Nothing is installed when both are already there.
+3. Sets `DENO_INSTALL=/usr/local` so the binary lands in `/usr/local/bin`, on `PATH` for all users.
+4. Runs Deno’s own installer from `https://deno.land/install.sh`, passing the tag in its `deno_version` variable when `version` is not `latest`.
 
 ## Verification
 

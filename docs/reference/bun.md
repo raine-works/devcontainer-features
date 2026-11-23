@@ -16,9 +16,10 @@ Give `version` a bare `X.Y.Z` version number. The script adds the `bun-v` releas
 
 ## What the feature does
 
-1. Installs `curl` and `unzip` with `apt-get` if either is missing. Nothing is installed when both are already there.
-2. Sets `BUN_INSTALL=/usr/local` so the binary lands in `/usr/local/bin`, on `PATH` for all users.
-3. Runs Bun’s own installer from `https://bun.sh/install`, with the release tag as its argument when `version` is not `latest`.
+1. Checks that `version` is `latest` or a bare `X.Y.Z` release, and stops the build otherwise.
+2. Installs `curl` and `unzip` with `apt-get` if either is missing. Nothing is installed when both are already there.
+3. Sets `BUN_INSTALL=/usr/local` so the binary lands in `/usr/local/bin`, on `PATH` for all users.
+4. Runs Bun’s own installer from `https://bun.sh/install`, with the release tag as its argument when `version` is not `latest`.
 
 ## Verification
 
