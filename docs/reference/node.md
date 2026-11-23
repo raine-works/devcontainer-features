@@ -50,7 +50,7 @@ All requested packages are installed in a single `npm install -g`. npm itself is
 
 ## What the feature does
 
-1. Installs `curl`, `xz-utils` and `ca-certificates` with `apt-get` if missing.
+1. Installs `curl`, `xz-utils`, `ca-certificates` and `libatomic1` (the `node` binary needs it) with `apt-get` if missing.
 2. Maps the machine architecture (`x86_64` to `x64`, `aarch64` to `arm64`). Any other architecture stops the build.
 3. Resolves `nodeVersion` to an exact version.
 4. Downloads `node-v<version>-linux-<arch>.tar.xz` and `SHASUMS256.txt` from `https://nodejs.org/dist/v<version>/`, and checks the tarball against the checksum. See [Checksums and verification](../checksums.md).
