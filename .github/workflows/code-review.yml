@@ -1,0 +1,32 @@
+# Claude reviews every pull request against the rules, and answers replies to its comments. The workflow is Raineworks', in
+# raine-works/agents (.github/workflows/code-review.yml): this file only calls it, and comes from the raineworks-base skill's
+# templates/workflows/code-review.yml. Change the workflow there, for every repository at once; here, only its inputs
+# (with:). The Base rules check moves the pin when the shared workflows change.
+name: Code review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+  actions: read
+
+jobs:
+  code-review:
+    name: Code review
+    uses: raine-works/agents/.github/workflows/code-review.yml@bcc3f92307e34338be03ec7f6a243c3435604800 # raine-works/agents master
+    secrets: inherit
+    with:
+      focus: |
+        - install scripts (run as root at image build time): an option value reaching a command, URL or path without
+          being validated, a download not over HTTPS or not checksum-verified where upstream publishes one, a
+          prerequisite installed even when it's already there;
+        - a change to a feature without a bump of its `version` (it would never be published);
+        - an edit to a generated `src/<feature>/README.md` instead of its `NOTES.md` or `docs/`;
+        - a new option or behaviour without a scenario and its assertions, or docs/ (the feature's reference page) not
+          updated for it.
