@@ -15,8 +15,9 @@ YARN_VERSION="${YARN:-none}"
 BUN_VERSION="${BUN:-none}"
 DIST_URL="https://nodejs.org/dist"
 
-# Debian/Ubuntu only: install curl, certificates and xz (the tarball is .tar.xz)
-# when missing, so base images that already ship them are left untouched.
+# Debian/Ubuntu only: install curl, certificates, xz (the tarball is .tar.xz)
+# and libatomic (the node binary links it; bare debian and ubuntu images don't
+# ship it) when missing, so base images that already have them are left untouched.
 prerequisites=()
 
 if ! command -v curl &> /dev/null; then
@@ -29,6 +30,10 @@ fi
 
 if [ ! -e /etc/ssl/certs/ca-certificates.crt ]; then
     prerequisites+=("ca-certificates")
+fi
+
+if ! ldconfig -p 2> /dev/null | grep -q 'libatomic\.so\.1'; then
+    prerequisites+=("libatomic1")
 fi
 
 if [ ${#prerequisites[@]} -eq 0 ]; then

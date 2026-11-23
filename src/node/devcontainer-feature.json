@@ -1,7 +1,7 @@
 {
     "name": "Node.js with package managers",
     "id": "node",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Install Node.js (checksum verified) with npm plus your choice of pnpm, yarn and bun.",
     "options": {
         "nodeVersion": {
