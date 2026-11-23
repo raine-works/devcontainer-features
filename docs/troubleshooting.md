@@ -26,6 +26,10 @@ A `pnpm`, `yarn` or `bun` value contains characters other than letters, digits, 
 
 `sha256sum -c` prints `FAILED` when the downloaded Node.js tarball does not match the published checksum. Retry the build. If it persists, the download is being altered or truncated, for example by a proxy.
 
+## `Invalid version '…'`
+
+The Bun or Deno `version` value is neither `latest` nor a bare `X.Y.Z` release. Since `bun` and `deno` 1.0.1 the features reject it before installing anything. Drop any prefix (`v`, `bun-v`) and give all three parts, such as `1.2.0`.
+
 ## Pinned version not found
 
 For Bun, Deno and an exact Node.js version, a version that does not exist makes the download fail (`curl -f` exits with an error). Give a bare version such as `1.2.0`, without a prefix, for Bun and Deno.

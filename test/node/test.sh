@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Default options: Node.js LTS plus pnpm.
-set -e
+set -euo pipefail
 
 source dev-container-features-test-lib
 

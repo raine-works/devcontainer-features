@@ -10,9 +10,9 @@ Installs the [Deno](https://deno.com) JavaScript runtime system-wide.
 
 | Option | Type | Default | What it does |
 | :--- | :--- | :--- | :--- |
-| `version` | string | `latest` | The Deno version to install. `latest` installs the newest release. Anything else is treated as an exact release such as `2.1.7`. An empty value falls back to `latest`. |
+| `version` | string | `latest` | The Deno version to install. `latest` installs the newest release. Otherwise it must be an exact release such as `2.1.7`. An empty value falls back to `latest`. |
 
-Give `version` a bare version number. The script adds the `v` release-tag prefix itself, so `2.1.7` becomes `v2.1.7`.
+Give `version` a bare `X.Y.Z` version number. The script adds the `v` release-tag prefix itself, so `2.1.7` becomes `v2.1.7`. Any other value (`2.1`, `v2.1.7`) fails the build with `Invalid version '…'` before anything is installed.
 
 ## What the feature does
 
