@@ -1,0 +1,32 @@
+# Issue to PR: an issue opened by the owner (or any issue once it's labelled `claude`) is worked by Claude into a pull
+# request, which Claude then sees through its checks and Code review's findings until it's approved. The workflow is
+# Raineworks', in raine-works/agents (.github/workflows/issue-to-pr.yml): this file only calls it, and comes from the
+# raineworks-base skill's templates/workflows/issue-to-pr.yml. Change the workflow there, for every repository at
+# once; here, only its triggers' CI name and its inputs (with:). The Base rules check moves the pin when the shared
+# workflows change.
+name: Issue to PR
+
+on:
+  issues:
+    types: [opened, labeled]
+  # Its follow-up: after the review, and after the repository's CI (its workflow's name), on Claude's pull requests.
+  workflow_run:
+    workflows: [Code review, CI - Test Features]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+  actions: read
+
+jobs:
+  issue-to-pr:
+    name: Issue to PR
+    uses: raine-works/agents/.github/workflows/issue-to-pr.yml@cdeab16880b1759ed86626295567a91a6a0dfa56 # raine-works/agents master
+    secrets: inherit
+    # The checks Claude can run here: shellcheck on the install scripts, and the version-bump check. The features' own
+    # tests (devcontainer CLI, Docker) run in CI.
+    with:
+      allowed-commands: Bash(shellcheck src/*/install.sh),Bash(shellcheck src/bun/install.sh),Bash(shellcheck src/deno/install.sh),Bash(shellcheck src/node/install.sh),Bash(bash .github/scripts/check-version-bumps.sh origin/master)
