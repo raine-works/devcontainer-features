@@ -48,10 +48,10 @@ When you add an option or change behavior, add or adjust a scenario and its asse
 
 ## Releasing
 
-1. Bump `version` in the feature’s `devcontainer-feature.json`.
+1. Bump `version` in the feature’s `devcontainer-feature.json`: patch for a fix, minor for a new option, major for a breaking change. The **Version bump** check fails a pull request that changes a feature (anything in `src/<feature>/` but its `README.md` and `NOTES.md`) without bumping it, since an unbumped change would never be published.
 2. Merge to `master`.
 
-The release workflow publishes only features whose version is not yet in GHCR, then opens a pull request with the regenerated per-feature READMEs. Merging that pull request triggers one more run, which finds nothing to publish.
+The release workflow publishes only features whose version is not yet in GHCR, makes a GitHub Release for each version it published (`feature_<id>_<version>`, its notes the commits that changed the feature since its previous version), then opens a pull request with the regenerated per-feature READMEs. `.github/scripts/create-releases.sh` makes any release that's missing; with `DRY_RUN=1` it prints them instead. Merging that pull request triggers one more run, which finds nothing to publish.
 
 The workflow uses the built-in `GITHUB_TOKEN`; no secrets are required. One-time setup: enable **Settings > Actions > General > Allow GitHub Actions to create and approve pull requests**, otherwise the docs pull request step fails. Pull requests opened this way do not trigger CI, which is fine for generated READMEs.
 
