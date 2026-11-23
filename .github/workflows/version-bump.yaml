@@ -1,0 +1,22 @@
+# Fails a PR that changes a feature without bumping its version: the release workflow publishes only versions GHCR
+# doesn't have yet, so the change would never ship. See .github/scripts/check-version-bumps.sh.
+name: "Version bump"
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # The base branch's history too, to compare each feature's version with it.
+          fetch-depth: 0
+
+      - name: "Check every changed feature's version was bumped"
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: .github/scripts/check-version-bumps.sh "origin/$BASE_REF"
