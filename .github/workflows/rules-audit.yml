@@ -23,7 +23,7 @@ permissions:
 jobs:
   rules-audit:
     name: Rules audit
-    uses: raine-works/agents/.github/workflows/rules-audit.yml@cdeab16880b1759ed86626295567a91a6a0dfa56 # raine-works/agents master
+    uses: raine-works/agents/.github/workflows/rules-audit.yml@aba82571e4923b96fbb64c3785bfc70a742b7c54 # raine-works/agents master
     secrets: inherit
     # with:
     #   rules: .raineworks/base.md AGENTS.md
