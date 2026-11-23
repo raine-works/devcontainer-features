@@ -27,7 +27,7 @@ permissions:
 jobs:
   issue-to-pr:
     name: Issue to PR
-    uses: raine-works/agents/.github/workflows/issue-to-pr.yml@3c5ed21e50ea3eb6160bad3d83a2a7f74a146d6a # raine-works/agents master
+    uses: raine-works/agents/.github/workflows/issue-to-pr.yml@71331a024dabfe5f1f4d9ec6ae6779ce7fbd4573 # raine-works/agents master
     secrets: inherit
     # The checks Claude can run here: shellcheck on the install scripts, and the version-bump check. The features' own
     # tests (devcontainer CLI, Docker) run in CI.
