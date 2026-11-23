@@ -12,7 +12,8 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "node": {
-                "nodeVersion": "20"
+                "nodeVersion": "20",
+                "pnpm": "10.4.1"
             }
         }
     },
@@ -20,9 +21,10 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "node": {
-                "pnpm": "latest",
-                "yarn": "latest",
-                "bun": "latest"
+                "nodeVersion": "22.11.0",
+                "pnpm": "10.4.1",
+                "yarn": "4.5.0",
+                "bun": "1.2.0"
             }
         }
     },
@@ -30,6 +32,7 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "node": {
+                "nodeVersion": "22.11.0",
                 "pnpm": "none",
                 "yarn": "classic"
             }
@@ -39,6 +42,7 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "node": {
+                "nodeVersion": "22.11.0",
                 "pnpm": "none"
             }
         }

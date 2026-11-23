@@ -10,9 +10,9 @@ Installs the [Bun](https://bun.sh) JavaScript runtime system-wide.
 
 | Option | Type | Default | What it does |
 | :--- | :--- | :--- | :--- |
-| `version` | string | `latest` | The Bun version to install. `latest` installs the newest release. Anything else is treated as an exact release such as `1.2.0`. An empty value falls back to `latest`. |
+| `version` | string | `latest` | The Bun version to install. `latest` installs the newest release. Otherwise it must be an exact release such as `1.2.0`. An empty value falls back to `latest`. |
 
-Give `version` a bare version number. The script adds the `bun-v` release-tag prefix itself, so `1.2.0` becomes the `bun-v1.2.0` release.
+Give `version` a bare `X.Y.Z` version number. The script adds the `bun-v` release-tag prefix itself, so `1.2.0` becomes the `bun-v1.2.0` release. Any other value (`1.2`, `v1.2.0`, `bun-v1.2.0`) fails the build with `Invalid version '…'` before anything is installed.
 
 ## What the feature does
 
